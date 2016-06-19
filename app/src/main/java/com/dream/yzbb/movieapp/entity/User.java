@@ -1,18 +1,14 @@
 package com.dream.yzbb.movieapp.entity;
 
-import com.dream.yzbb.movieapp.BR;
-
-import android.databinding.BaseObservable;
-import android.databinding.Bindable;
 import android.databinding.ObservableField;
 
 /**
  * Created by kevin on 16/6/18.
  */
-public class User extends BaseObservable {
-//public class User{
-//    public final ObservableField<String> name = new ObservableField<>();
-    private String name;
+public class User {
+    //public class User{
+    public final ObservableField<String> name = new ObservableField<>();
+    //    private String name;
     private int age;
 
 
@@ -31,14 +27,18 @@ public class User extends BaseObservable {
     public User() {
     }
 
-    @Bindable
-    public String getName() {
-        return name;
-    }
+//    @Bindable
+//    public String getName() {
+//        return name;
+//    }
+
+//    public void setName(String name) {
+//        this.name = name;
+//        notifyPropertyChanged(BR.name);
+//    }
 
     public void setName(String name) {
-        this.name = name;
-        notifyPropertyChanged(BR.name);
+        this.name.set(name);
     }
 
 //    public User(String name, int age) {
