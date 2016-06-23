@@ -1,8 +1,8 @@
 package com.dream.yzbb.movieapp.http;
 
+import com.dream.yzbb.movieapp.entity.TopRatedMovieInfo;
 import com.dream.yzbb.movieapp.utils.Constants;
 
-import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.http.GET;
 import retrofit2.http.Query;
@@ -13,7 +13,7 @@ import retrofit2.http.Query;
 public class MovieApi {
 
     public interface MovieDetail{
-        @GET(Constants.MovieDetailApiUrl)
-        Call<ResponseBody> getMovieDetail(@Query("api_key")String apiKey);
+        @GET(Constants.MovieTopRatedApiUrl)
+        Call<TopRatedMovieInfo> getMovieDetail(@Query("api_key")String apiKey);
     }
 }
