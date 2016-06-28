@@ -1,16 +1,21 @@
 package com.dream.yzbb.movieapp;
 
 
+import android.content.Context;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.GridLayoutManager;
+import android.support.v7.widget.RecyclerView;
+import android.text.Layout;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.dream.yzbb.movieapp.databinding.FragmentTopRatedMovieBinding;
@@ -20,6 +25,8 @@ import com.dream.yzbb.movieapp.entity.User;
 import com.dream.yzbb.movieapp.http.MovieApi;
 import com.dream.yzbb.movieapp.utils.Constants;
 import com.squareup.picasso.Picasso;
+
+import java.util.List;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -36,6 +43,7 @@ public class TopRatedMovieFragment extends Fragment implements View.OnClickListe
     private View mRootView;
     private Button mButton;
     private ImageView mImageView;
+    private RecyclerView mRecyclerView;
 
 
     public TopRatedMovieFragment() {
@@ -54,16 +62,22 @@ public class TopRatedMovieFragment extends Fragment implements View.OnClickListe
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        mButton = (Button) view.findViewById(R.id.action);
-        mButton.setOnClickListener(this);
-        FragmentTopRatedMovieBinding fragmentTopRatedMovieBinding = DataBindingUtil.bind(mRootView);
-        fragmentTopRatedMovieBinding.setUser(mUser);
-        mImageView = (ImageView) view.findViewById(R.id.image);
+        initView(view);
     }
 
     public void assignValue() {
         Toast.makeText(getContext(), "Set user's name", Toast.LENGTH_SHORT).show();
         mUser.setName("Xianpzha");
+    }
+
+    private void initView(View view) {
+        mButton = (Button) view.findViewById(R.id.action);
+        mButton.setOnClickListener(this);
+        FragmentTopRatedMovieBinding fragmentTopRatedMovieBinding = DataBindingUtil.bind(mRootView);
+        fragmentTopRatedMovieBinding.setUser(mUser);
+        mImageView = (ImageView) view.findViewById(R.id.image);
+        mRecyclerView = (RecyclerView) view.findViewById(R.id.recycler);
+        mRecyclerView.setLayoutManager(new GridLayoutManager(getContext(), 3));
     }
 
     @Override
@@ -93,5 +107,42 @@ public class TopRatedMovieFragment extends Fragment implements View.OnClickListe
                 Log.e(Constants.LOG_TAG, "request failure, failure reason is " + t);
             }
         });
+    }
+
+    public class RecyclerViewAdapter extends RecyclerView.Adapter<MovieDetailHolder> {
+
+        private LayoutInflater mLayoutInflater;
+        private final Context mContext;
+
+        @Override
+        public MovieDetailHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+            return new MovieDetailHolder(mLayoutInflater.inflate(R.layout.item_movie_detail, parent, false));
+        }
+
+        @Override
+        public void onBindViewHolder(MovieDetailHolder holder, int position) {
+
+        }
+
+        @Override
+        public int getItemCount() {
+            return 0;
+        }
+
+        public RecyclerViewAdapter(Context mContext) {
+            this.mContext = mContext;
+            mLayoutInflater = LayoutInflater.from(mContext);
+        }
+    }
+
+    public static class MovieDetailHolder extends RecyclerView.ViewHolder {
+        private ImageView mMovieImage;
+        private TextView mMovieTitle;
+
+        public MovieDetailHolder(View itemView) {
+            super(itemView);
+            mMovieImage = (ImageView) itemView.findViewById(R.id.image);
+            mMovieTitle = (TextView) itemView.findViewById(R.id.movie_name);
+        }
     }
 }
