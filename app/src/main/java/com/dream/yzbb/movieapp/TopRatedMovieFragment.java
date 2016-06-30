@@ -26,6 +26,8 @@ import com.dream.yzbb.movieapp.http.MovieApi;
 import com.dream.yzbb.movieapp.utils.Constants;
 import com.squareup.picasso.Picasso;
 
+import java.lang.reflect.Array;
+import java.util.ArrayList;
 import java.util.List;
 
 import retrofit2.Call;
@@ -44,6 +46,8 @@ public class TopRatedMovieFragment extends Fragment implements View.OnClickListe
     private Button mButton;
     private ImageView mImageView;
     private RecyclerView mRecyclerView;
+    private ArrayList<String> mMovieTitles;
+    private ArrayList<String> mMovieImages;
 
 
     public TopRatedMovieFragment() {
@@ -63,6 +67,7 @@ public class TopRatedMovieFragment extends Fragment implements View.OnClickListe
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         initView(view);
+        initData();
     }
 
     public void assignValue() {
@@ -75,9 +80,10 @@ public class TopRatedMovieFragment extends Fragment implements View.OnClickListe
         mButton.setOnClickListener(this);
         FragmentTopRatedMovieBinding fragmentTopRatedMovieBinding = DataBindingUtil.bind(mRootView);
         fragmentTopRatedMovieBinding.setUser(mUser);
-        mImageView = (ImageView) view.findViewById(R.id.image);
+//        mImageView = (ImageView) view.findViewById(R.id.image);
         mRecyclerView = (RecyclerView) view.findViewById(R.id.recycler);
         mRecyclerView.setLayoutManager(new GridLayoutManager(getContext(), 3));
+        mRecyclerView.setAdapter(new RecyclerViewAdapter(getContext()));
     }
 
     @Override
@@ -85,7 +91,7 @@ public class TopRatedMovieFragment extends Fragment implements View.OnClickListe
         switch (v.getId()) {
             case R.id.action:
 //                assignValue();
-                getMovieDetail();
+//                getMovieDetail();
                 break;
         }
     }
@@ -121,12 +127,13 @@ public class TopRatedMovieFragment extends Fragment implements View.OnClickListe
 
         @Override
         public void onBindViewHolder(MovieDetailHolder holder, int position) {
-
+            holder.mMovieTitle.setText(mMovieTitles.get(position));
+            Picasso.with(mContext).load(Constants.MovieImageBaseUrl+mMovieImages.get(position)).into(holder.mMovieImage);
         }
 
         @Override
         public int getItemCount() {
-            return 0;
+            return mMovieImages.size();
         }
 
         public RecyclerViewAdapter(Context mContext) {
@@ -144,5 +151,23 @@ public class TopRatedMovieFragment extends Fragment implements View.OnClickListe
             mMovieImage = (ImageView) itemView.findViewById(R.id.image);
             mMovieTitle = (TextView) itemView.findViewById(R.id.movie_name);
         }
+    }
+
+    private void initData(){
+        mMovieTitles = new ArrayList<>();
+        mMovieTitles.add("Whiplash");
+        mMovieTitles.add("The Shawshank Redemption");
+        mMovieTitles.add("Lo chiamavano Jeeg Robot");
+        mMovieTitles.add("The Godfather");
+        mMovieTitles.add("Interstellar");
+        mMovieTitles.add("千と千尋の神隠し");
+        mMovieImages = new ArrayList<>();
+        mMovieImages.add("/lIv1QinFqz4dlp5U4lQ6HaiskOZ.jpg");
+        mMovieImages.add("/9O7gLzmreU0nGkIB6K3BsJbzvNv.jpg");
+        mMovieImages.add("/poC4JgAnZYt1aOuUpFrsPpPZTXm.jpg");
+        mMovieImages.add("/d4KNaTrltq6bpkFS01pYtyXa09m.jpg");
+        mMovieImages.add("/nBNZadXqJSdt05SHLqgT0HuC5Gm.jpg");
+        mMovieImages.add("/ynXoOxmDHNQ4UAy0oU6avW71HVW.jpg");
+        mRecyclerView.getAdapter().notifyDataSetChanged();
     }
 }
